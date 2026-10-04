@@ -1,0 +1,13 @@
+CREATE DATABASE IF NOT EXISTS db_senja_lofi CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE db_senja_lofi;
+CREATE TABLE IF NOT EXISTS admin(id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(60) NOT NULL UNIQUE, password VARCHAR(255) NOT NULL);
+CREATE TABLE IF NOT EXISTS lineup(id INT AUTO_INCREMENT PRIMARY KEY, nama VARCHAR(150) NOT NULL, genre VARCHAR(120) NOT NULL, jam VARCHAR(80) NOT NULL, sesi ENUM('Siang','Sore','Malam') NOT NULL, img VARCHAR(255) DEFAULT 'assets/img/artist-placeholder.svg');
+CREATE TABLE IF NOT EXISTS ticket_config(id TINYINT PRIMARY KEY, harga_regular INT NOT NULL DEFAULT 75000, harga_vip INT NOT NULL DEFAULT 150000, kuota_total INT NOT NULL DEFAULT 500);
+CREATE TABLE IF NOT EXISTS festival_settings(id TINYINT PRIMARY KEY, tanggal VARCHAR(80) NOT NULL, lokasi VARCHAR(255) NOT NULL, banner VARCHAR(255) DEFAULT 'assets/img/hero.svg', deskripsi TEXT);
+CREATE TABLE IF NOT EXISTS orders(id INT AUTO_INCREMENT PRIMARY KEY, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, nama VARCHAR(150) NOT NULL, wa VARCHAR(30) NOT NULL, jenis ENUM('Regular','VIP') NOT NULL, jumlah INT NOT NULL, total INT NOT NULL, status VARCHAR(50) NOT NULL DEFAULT 'Menunggu Pembayaran');
+INSERT IGNORE INTO admin(username,password) VALUES('admin','$2y$12$k8PWmKAd7L0Qo491ToQdM.5bVnhnKT.bhc97z8Jlj897pf75fZB9i');
+INSERT IGNORE INTO ticket_config(id,harga_regular,harga_vip,kuota_total) VALUES(1,75000,150000,500);
+INSERT IGNORE INTO festival_settings(id,tanggal,lokasi,banner,deskripsi) VALUES(1,'28 Oktober 2026','Taman Senja Kota, Jakarta','assets/img/hero.svg','Satu hari bersantai menikmati alunan musik lo-fi akustik dengan pemandangan langit senja taman kota yang hangat.');
+INSERT INTO lineup(nama,genre,jam,sesi,img) SELECT 'Lofi Breeze','Chillhop / Lo-Fi','14:00 - 15:00 WIB','Siang','assets/img/artist-placeholder.svg' WHERE NOT EXISTS(SELECT 1 FROM lineup);
+INSERT INTO lineup(nama,genre,jam,sesi,img) SELECT 'Sunset Beats','Ambient Lo-Fi','16:30 - 17:30 WIB','Sore','assets/img/artist-placeholder.svg' WHERE (SELECT COUNT(*) FROM lineup)<2;
+INSERT INTO lineup(nama,genre,jam,sesi,img) SELECT 'Midnight Coffee','Jazzhop / Chill','19:30 - 20:30 WIB','Malam','assets/img/artist-placeholder.svg' WHERE (SELECT COUNT(*) FROM lineup)<3;
