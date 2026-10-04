@@ -1083,7 +1083,7 @@ if ($login) {
                         <div class="card">
                             <div class="card-head">
                                 <div>
-                                    <h3>Data Tiket & Transaksi</h3><span>Semua pembelian tiket</span>
+                                    <h3>Data Tiket dan Transaksi</h3><span>Semua pembelian tiket</span>
                                 </div>
                             </div>
                             <div class="table-wrap">
